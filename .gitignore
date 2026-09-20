@@ -1,0 +1,19 @@
+# Nothing here is generated into the working tree except the per-package
+# copies, and those are committed on purpose so a consumer installing from
+# source gets a complete package.
+
+# Editors
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Language tooling
+vendor/
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+
+# Local checkout of the context repo, used by validate.py in CI
+.context/

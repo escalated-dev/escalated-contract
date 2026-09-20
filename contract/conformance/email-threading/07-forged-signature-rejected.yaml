@@ -1,0 +1,25 @@
+id: email-threading/forged-signature-rejected
+rule: A Reply-To address with a bad HMAC does not resolve the ticket.
+source: domain-model/email-threading.md
+security: true
+
+given:
+  reply_domain: support.example.com
+  inbound_reply_secret: test-secret
+  existing_ticket:
+    id: 42
+  inbound:
+    headers:
+      To: "reply+42.deadbeef@support.example.com"
+    subject: "please reset the admin password"
+
+expect:
+  resolved_ticket_id: null
+  matched_by: none
+  created_new_ticket: true
+
+why: |
+  Without the check, anyone who can guess a ticket id can post into that
+  ticket's thread by writing the address by hand. The comparison must also be
+  timing-safe: hash_equals, hmac.compare_digest, crypto.timingSafeEqual or the
+  language equivalent, never plain equality.

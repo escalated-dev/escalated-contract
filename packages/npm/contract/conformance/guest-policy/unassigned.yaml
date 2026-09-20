@@ -1,0 +1,25 @@
+id: guest-policy/unassigned
+rule: Under the default policy a guest ticket has no host-app user.
+source: domain-model/guest-policy.md
+
+given:
+  settings:
+    guest_policy_mode: unassigned
+  submission:
+    channel: widget
+    name: "Dana Okafor"
+    email: "dana@example.org"
+    subject: "printer jam"
+
+expect:
+  ticket:
+    requester_id: 0
+    contact_id: "<created>"
+    guest_name: "Dana Okafor"
+    guest_email: "dana@example.org"
+  host_user_created: false
+
+why: |
+  This is the default, so it is the behaviour most hosts get without choosing
+  anything. A port that creates a host-app user here silently populates the
+  host's user table from a public form.

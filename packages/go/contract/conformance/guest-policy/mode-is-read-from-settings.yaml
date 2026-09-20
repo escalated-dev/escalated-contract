@@ -1,0 +1,19 @@
+id: guest-policy/mode-is-read-from-settings
+rule: The mode comes from the settings store, not from a constant.
+source: domain-model/guest-policy.md
+
+given:
+  settings:
+    guest_policy_mode: guest_user
+  submission:
+    channel: widget
+    name: "Dana Okafor"
+    email: "dana@example.org"
+
+expect:
+  policy_mode_applied: guest_user
+
+why: |
+  Reading the key is the contract. A port that hard-codes the default passes
+  every test written against the default and ignores the admin setting
+  entirely, which only shows up once a host changes it.

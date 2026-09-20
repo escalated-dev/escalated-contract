@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/escalated-dev/escalated-contract/contract/schema/conformance.schema.json",
+  "title": "Escalated conformance fixture",
+  "description": "One rule, stated as inputs and the result every port must produce. Deliberately language-neutral: a fixture describes behaviour, never an implementation.",
+  "type": "object",
+  "required": ["id", "rule", "source", "given", "expect", "why"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable identifier, `<area>/<slug>`. Runners report failures by this, so it must not change once published.",
+      "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"
+    },
+    "rule": {
+      "type": "string",
+      "description": "One sentence, in the present tense, saying what must be true.",
+      "minLength": 10
+    },
+    "source": {
+      "type": "string",
+      "description": "Path in escalated-developer-context this was taken from. A fixture with no canonical source is a guess.",
+      "minLength": 3
+    },
+    "priority": {
+      "type": "integer",
+      "description": "Only for ordered chains, where the position is itself the thing being asserted.",
+      "minimum": 1
+    },
+    "security": {
+      "type": "boolean",
+      "description": "Set when failing this fixture is a vulnerability rather than a bug. Runners should not allow these to be skipped."
+    },
+    "given": {
+      "type": "object",
+      "description": "The inputs. Ports map these onto their own models.",
+      "minProperties": 1
+    },
+    "expect": {
+      "type": "object",
+      "description": "The observable result. Assert on these and nothing else.",
+      "minProperties": 1
+    },
+    "notes": {
+      "type": "string",
+      "description": "Anything a runner needs in order to build the inputs, such as a value it has to compute."
+    },
+    "why": {
+      "type": "string",
+      "description": "What breaks if a port gets this wrong. Written for whoever hits the failure in six months.",
+      "minLength": 20
+    }
+  }
+}

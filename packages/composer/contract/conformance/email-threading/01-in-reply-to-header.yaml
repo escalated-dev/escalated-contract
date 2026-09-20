@@ -1,0 +1,25 @@
+id: email-threading/in-reply-to-header
+rule: Inbound mail resolves to a ticket by In-Reply-To before anything else.
+priority: 1
+source: domain-model/email-threading.md
+
+given:
+  reply_domain: support.example.com
+  existing_ticket:
+    id: 42
+  inbound:
+    headers:
+      In-Reply-To: "<ticket-42@support.example.com>"
+      References: "<ticket-99@support.example.com>"
+      To: "support@support.example.com"
+    subject: "Re: printer jam"
+
+expect:
+  resolved_ticket_id: 42
+  matched_by: in_reply_to
+  created_new_ticket: false
+
+why: |
+  References names a different ticket on purpose. If a port reads References
+  first it resolves to 99 and the reply lands on the wrong ticket. The order is
+  the assertion here, not the lookup.

@@ -1,0 +1,16 @@
+id: admin-surfaces/macros-have-no-triggers
+rule: Macros are manual agent actions with no conditions and no triggers.
+source: domain-model/workflows-automations-macros.md
+
+given:
+  surface: macros
+
+expect:
+  triggered_by: agent
+  has_conditions: false
+  has_triggers: false
+  is_admin_surface: false
+
+why: |
+  Macros are an agent tool, not an admin one. Putting them behind the admin
+  permission hides them from the people meant to use them.

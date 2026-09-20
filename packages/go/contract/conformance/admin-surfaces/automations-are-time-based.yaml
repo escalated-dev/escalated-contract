@@ -1,0 +1,17 @@
+id: admin-surfaces/automations-are-time-based
+rule: Automations run on a schedule and cannot react to events.
+source: domain-model/workflows-automations-macros.md
+
+given:
+  surface: automations
+
+expect:
+  triggered_by: schedule
+  evaluates_conditions_like: ["hours_since_last_reply", "hours_since_created"]
+  accepts_event_trigger: false
+  is_admin_surface: true
+
+why: |
+  A cron scan reading hours_since_* conditions. Wiring an automation to an
+  event makes it fire once instead of continuing to match, which reads as the
+  rule working and then quietly stopping.

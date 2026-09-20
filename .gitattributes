@@ -1,0 +1,18 @@
+# The contract is data that gets byte-compared by scripts/sync.py --check and
+# embedded into the Go package. Normalise it so a Windows checkout and a Linux
+# CI runner agree on the bytes.
+* text=auto eol=lf
+
+*.json   text eol=lf
+*.yaml   text eol=lf
+*.yml    text eol=lf
+*.php    text eol=lf
+*.js     text eol=lf
+*.ts     text eol=lf
+*.go     text eol=lf
+*.py     text eol=lf
+*.md     text eol=lf
+
+# Keep the generated copies out of diffs and language stats. They are reviewed
+# by regenerating them, not by reading them.
+packages/*/contract/** linguist-generated=true

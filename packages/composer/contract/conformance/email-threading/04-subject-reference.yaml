@@ -1,0 +1,23 @@
+id: email-threading/subject-reference
+rule: A [TK-nnn] subject reference resolves the ticket as a fallback.
+priority: 4
+source: domain-model/email-threading.md
+
+given:
+  reply_domain: support.example.com
+  existing_ticket:
+    id: 42
+    reference: "TK-042"
+  inbound:
+    headers:
+      To: "support@support.example.com"
+    subject: "Fwd: [TK-042] printer jam"
+
+expect:
+  resolved_ticket_id: 42
+  matched_by: subject_reference
+  created_new_ticket: false
+
+why: |
+  Covers an agent forwarding by hand from their own mailbox, where no Escalated
+  header survives but the subject does.

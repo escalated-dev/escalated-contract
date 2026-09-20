@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/escalated-dev/escalated-contract/contract/schema/pages.schema.json",
+  "title": "Escalated page manifest",
+  "description": "Every Inertia page name the shared frontend resolves, and the props each one reads. A backend rendering a name that is not in `pages` produces a blank panel, not an error.",
+  "type": "object",
+  "required": ["version", "pages", "props"],
+  "additionalProperties": false,
+  "properties": {
+    "$comment": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string",
+      "description": "The @escalated-dev/escalated release this manifest was generated from.",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "pages": {
+      "type": "array",
+      "description": "Page names, sorted. Each must resolve to a component in the frontend package.",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^Escalated/[A-Za-z0-9/_]+$"
+      }
+    },
+    "props": {
+      "type": "object",
+      "description": "Keyed by page name. Lists the props the component reads, and which of them it cannot render without.",
+      "propertyNames": {
+        "pattern": "^Escalated/[A-Za-z0-9/_]+$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["props", "required"],
+        "additionalProperties": false,
+        "properties": {
+          "props": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string" }
+          },
+          "required": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

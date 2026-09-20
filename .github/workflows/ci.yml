@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    name: Validate the contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      # The fixtures name documents in the context repo, and validate.py checks
+      # they exist. Without this the source check is skipped rather than failed.
+      - name: Check out escalated-developer-context
+        uses: actions/checkout@v5
+        continue-on-error: true
+        with:
+          repository: escalated-dev/escalated-developer-context
+          path: .context
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - run: pip install pyyaml jsonschema
+
+      - name: Validate schemas, cross-references and sources
+        run: |
+          if [ -d .context ]; then
+            python scripts/validate.py --context .context
+          else
+            echo "context repo unavailable, running without source checks"
+            python scripts/validate.py
+          fi
+
+      # packages/*/contract is generated. If it has drifted from contract/,
+      # a release would publish something different from what is in the repo.
+      - name: Per-package copies are in sync
+        run: python scripts/sync.py --check
+
+  runners:
+    name: Reference runners
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Node runner
+        run: node --test runners/node/*.test.js
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.22'
+
+      - name: Go package builds and embeds
+        run: go vet ./...
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: PHP accessor parses
+        run: php -l packages/composer/src/Contract.php
+
+      # Reads the manifest through the published accessor rather than the file,
+      # so a broken embed or path shows up here and not in a port.
+      - name: PHP accessor reads the manifest
+        run: |
+          php -r '
+            require "packages/composer/src/Contract.php";
+            $pages = Escalated\Contract\Contract::pages();
+            if (count($pages) < 1) { fwrite(STDERR, "no pages\n"); exit(1); }
+            printf("%d pages, frontend %s\n", count($pages), Escalated\Contract\Contract::frontendVersion());
+          '

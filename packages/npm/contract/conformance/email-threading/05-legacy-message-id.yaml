@@ -1,0 +1,26 @@
+id: email-threading/legacy-message-id
+rule: Historical Message-IDs still resolve via the InboundEmail lookup table.
+priority: 5
+source: domain-model/email-threading.md
+
+given:
+  reply_domain: support.example.com
+  existing_ticket:
+    id: 42
+  inbound_email_records:
+    - message_id: "<legacy-abc123@support.example.com>"
+      ticket_id: 42
+  inbound:
+    headers:
+      In-Reply-To: "<legacy-abc123@support.example.com>"
+    subject: "Re: printer jam"
+
+expect:
+  resolved_ticket_id: 42
+  matched_by: legacy_message_id
+  created_new_ticket: false
+
+why: |
+  Mail sent before the canonical Message-ID format still threads. This priority
+  is the one expected to be removable one day. Until then, a port that skips it
+  breaks old threads and nothing else.

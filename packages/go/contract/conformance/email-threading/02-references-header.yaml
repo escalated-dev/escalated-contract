@@ -1,0 +1,24 @@
+id: email-threading/references-header
+rule: References resolves the ticket when In-Reply-To is absent.
+priority: 2
+source: domain-model/email-threading.md
+
+given:
+  reply_domain: support.example.com
+  existing_ticket:
+    id: 42
+  inbound:
+    headers:
+      References: "<ticket-42@support.example.com>"
+      To: "support@support.example.com"
+    subject: "Re: printer jam"
+
+expect:
+  resolved_ticket_id: 42
+  matched_by: references
+  created_new_ticket: false
+
+why: |
+  Some clients drop In-Reply-To but keep References. Falling through to
+  priority 3 here would need the signed address, which a forwarding layer may
+  have rewritten, so the thread would break for those clients only.

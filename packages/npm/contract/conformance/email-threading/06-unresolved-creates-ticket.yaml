@@ -1,0 +1,20 @@
+id: email-threading/unresolved-creates-ticket
+rule: Mail matching no priority opens a new ticket rather than being dropped.
+source: domain-model/email-threading.md
+
+given:
+  reply_domain: support.example.com
+  inbound:
+    headers:
+      To: "support@support.example.com"
+      From: "someone@example.org"
+    subject: "printer jam"
+
+expect:
+  resolved_ticket_id: null
+  matched_by: none
+  created_new_ticket: true
+
+why: |
+  The failure mode worth guarding is silent discard. A port that returns early
+  on no match loses the mail and nothing reports it.

@@ -1,0 +1,29 @@
+{
+  "name": "@escalated-dev/contract",
+  "version": "0.0.0",
+  "description": "The Escalated behaviour contract: the page manifest every backend must render, and language-neutral conformance fixtures every port runs against itself.",
+  "main": "packages/npm/index.js",
+  "types": "packages/npm/index.d.ts",
+  "files": [
+    "packages/npm/index.js",
+    "packages/npm/index.d.ts",
+    "packages/npm/contract/**/*"
+  ],
+  "scripts": {
+    "validate": "python scripts/validate.py",
+    "sync": "python scripts/sync.py",
+    "sync:check": "python scripts/sync.py --check",
+    "test": "node --test runners/node/*.test.js"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/escalated-dev/escalated-contract"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

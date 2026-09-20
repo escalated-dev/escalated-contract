@@ -1,0 +1,8 @@
+{
+  "name": "@escalated-dev/contract",
+  "version": "0.0.0",
+  "description": "Entry point for the published contract. The root package.json re-exports this.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "license": "MIT"
+}

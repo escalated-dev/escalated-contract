@@ -1,0 +1,18 @@
+id: admin-surfaces/workflows-are-event-driven
+rule: Workflows trigger on events and cannot be time-triggered.
+source: domain-model/workflows-automations-macros.md
+
+given:
+  surface: workflows
+
+expect:
+  triggered_by: events
+  example_triggers: ["ticket.created", "reply.created"]
+  accepts_time_trigger: false
+  is_admin_surface: true
+
+why: |
+  Workflows, automations and macros are three separate surfaces that co-exist
+  permanently, and none subsumes the others. This has been re-derived from code
+  and got the wrong answer more than once, so it is asserted rather than
+  documented.

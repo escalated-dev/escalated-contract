@@ -1,0 +1,29 @@
+id: email-threading/envelope-to-signed
+rule: The signed Reply-To address resolves the ticket when both headers are gone.
+priority: 3
+source: domain-model/email-threading.md
+
+given:
+  reply_domain: support.example.com
+  inbound_reply_secret: test-secret
+  existing_ticket:
+    id: 42
+  inbound:
+    headers:
+      To: "reply+42.{hmac8}@support.example.com"
+    subject: "printer jam"
+
+expect:
+  resolved_ticket_id: 42
+  matched_by: envelope_to
+  created_new_ticket: false
+
+notes: |
+  {hmac8} is HMAC-SHA256(ticketId, inbound_reply_secret) truncated to 8 hex
+  characters. A runner computes it rather than hard-coding it, so the fixture
+  stays valid if the secret changes.
+
+why: |
+  This is the path that survives a forwarding layer stripping headers. It is
+  also the only one carrying a signature, so it is the only one an outsider
+  could try to forge. See 07-forged-signature-rejected.
