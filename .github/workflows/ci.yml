@@ -16,14 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # The fixtures name documents in the context repo, and validate.py checks
-      # they exist. Without this the source check is skipped rather than failed.
+      # Every fixture names a document in the context repo, and validate.py
+      # confirms it exists. That repo is public, so this clones without a token
+      # and is expected to succeed. If it ever fails, the run fails rather than
+      # quietly dropping the check: a source check that skips itself is the
+      # same failure escalated-locale had, where five publish jobs skipped for
+      # months and the workflow stayed green.
       - name: Check out escalated-developer-context
-        uses: actions/checkout@v5
-        continue-on-error: true
-        with:
-          repository: escalated-dev/escalated-developer-context
-          path: .context
+        run: git clone --depth 1 https://github.com/escalated-dev/escalated-developer-context.git .context
 
       - uses: actions/setup-python@v6
         with:
@@ -32,13 +32,7 @@ jobs:
       - run: pip install pyyaml jsonschema
 
       - name: Validate schemas, cross-references and sources
-        run: |
-          if [ -d .context ]; then
-            python scripts/validate.py --context .context
-          else
-            echo "context repo unavailable, running without source checks"
-            python scripts/validate.py
-          fi
+        run: python scripts/validate.py --context .context
 
       # packages/*/contract is generated. If it has drifted from contract/,
       # a release would publish something different from what is in the repo.
