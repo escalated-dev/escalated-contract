@@ -10,14 +10,20 @@ As of 2026-09-20 this repo is built but unreleased, on purpose. No tag has been
 pushed, no package exists on any registry, and no port depends on it. Publishing
 is a deliberate next step, not something to do by accident.
 
+The repo is public, as of 2026-09-21. It has to be: Packagist only indexes
+public repos on the free tier, and the Go toolchain fetches
+`github.com/escalated-dev/escalated-contract/packages/go` straight from the VCS,
+so a private repo would need GOPRIVATE and credentials on every consumer and CI
+runner. All eleven ports are public, and a public repo depending on a private
+package breaks `composer install` for anyone outside the org. npm is the only
+channel that would have worked either way, because it ships tarballs.
+
 Before the first release:
 
-1. Decide whether the repo is public. Packagist needs a public VCS repo to index
-   it, and the other Escalated packages are public.
-2. Reserve the names: `escalated-dev/contract` on Packagist, `@escalated-dev/contract`
+1. Reserve the names: `escalated-dev/contract` on Packagist, `@escalated-dev/contract`
    on npm. Go needs nothing, it resolves from the tag.
-3. Add the secrets below.
-4. Tag `v0.1.0`.
+2. Add the secrets below.
+3. Tag `v0.1.0`.
 
 ## How a release goes
 
