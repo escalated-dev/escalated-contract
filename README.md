@@ -1,5 +1,7 @@
 # escalated-contract
 
+[![Views](https://hits.sh/github.com/escalated-dev/escalated-contract.svg?style=flat&label=views&color=007ec6)](https://hits.sh/github.com/escalated-dev/escalated-contract/)
+
 What every Escalated backend has to agree on, as data rather than prose.
 
 Eleven ports implement Escalated in eight languages. They share no source code
