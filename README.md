@@ -188,3 +188,7 @@ renders a name the frontend does not have and the screen comes up blank.
 - `escalated-developer-context` — the prose these fixtures are taken from
 - `escalated-locale` — the same repo shape, for translations
 - `escalated` — the frontend that `pages.json` is generated from
+
+## License
+
+MIT - Copyright (c) Escalated.dev. See [LICENSE](LICENSE).
