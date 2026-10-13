@@ -1,0 +1,32 @@
+{
+  "id": "ticket-access/token-actor",
+  "rule": "A bearer request uses its owner rather than browser administrator privileges.",
+  "source": "domain-model/ticket-access-and-routing.md",
+  "security": true,
+  "given": {
+    "settings": {
+      "visibility": "department"
+    },
+    "browser_actor": {
+      "role": "admin"
+    },
+    "token_actor": {
+      "role": "agent",
+      "departments": [
+        10
+      ]
+    },
+    "ticket": {
+      "id": 1,
+      "department_id": 20
+    }
+  },
+  "expect": {
+    "ticket_visible": false,
+    "ticket_mutable": false,
+    "browser_actor_after_request": {
+      "role": "admin"
+    }
+  },
+  "why": "Ports must preserve the same access boundary and SLA behavior so enabling optional configuration does not expose tickets or reset elapsed service clocks."
+}

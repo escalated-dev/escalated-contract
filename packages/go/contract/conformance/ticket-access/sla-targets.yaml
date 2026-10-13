@@ -1,0 +1,48 @@
+{
+  "id": "ticket-access/sla-targets",
+  "rule": "Targeted SLAs choose the most specific active match with deterministic ties.",
+  "source": "domain-model/ticket-access-and-routing.md",
+  "security": false,
+  "given": {
+    "settings": {
+      "targeted_slas": true
+    },
+    "ticket": {
+      "department_id": 10,
+      "ticket_type": "incident"
+    },
+    "policies": [
+      {
+        "id": 1,
+        "is_active": true,
+        "is_default": true
+      },
+      {
+        "id": 2,
+        "is_active": true,
+        "ticket_type": "incident"
+      },
+      {
+        "id": 3,
+        "is_active": true,
+        "department_id": 10
+      },
+      {
+        "id": 4,
+        "is_active": true,
+        "department_id": 10,
+        "ticket_type": "incident"
+      },
+      {
+        "id": 5,
+        "is_active": true,
+        "department_id": 10,
+        "ticket_type": "incident"
+      }
+    ]
+  },
+  "expect": {
+    "sla_policy_id": 4
+  },
+  "why": "Ports must preserve the same access boundary and SLA behavior so enabling optional configuration does not expose tickets or reset elapsed service clocks."
+}

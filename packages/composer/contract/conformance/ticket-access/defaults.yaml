@@ -1,0 +1,32 @@
+{
+  "id": "ticket-access/defaults",
+  "rule": "Existing staff access stays unchanged until restrictions are enabled.",
+  "source": "domain-model/ticket-access-and-routing.md",
+  "security": false,
+  "given": {
+    "settings": {},
+    "actor": {
+      "role": "agent",
+      "departments": []
+    },
+    "tickets": [
+      {
+        "id": 1,
+        "department_id": 10
+      },
+      {
+        "id": 2,
+        "department_id": null
+      }
+    ]
+  },
+  "expect": {
+    "visible_ticket_ids": [
+      1,
+      2
+    ],
+    "resolve_accounts": false,
+    "targeted_slas": false
+  },
+  "why": "Ports must preserve the same access boundary and SLA behavior so enabling optional configuration does not expose tickets or reset elapsed service clocks."
+}

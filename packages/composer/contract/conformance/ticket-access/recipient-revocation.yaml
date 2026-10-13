@@ -1,0 +1,27 @@
+{
+  "id": "ticket-access/recipient-revocation",
+  "rule": "Queued and live deliveries recheck current department membership.",
+  "source": "domain-model/ticket-access-and-routing.md",
+  "security": true,
+  "given": {
+    "settings": {
+      "visibility": "department"
+    },
+    "ticket": {
+      "id": 1,
+      "department_id": 10
+    },
+    "recipient": {
+      "role": "agent",
+      "departments_when_enqueued": [
+        10
+      ],
+      "departments_at_delivery": []
+    }
+  },
+  "expect": {
+    "staff_email_delivered": false,
+    "live_payload_delivered": false
+  },
+  "why": "Ports must preserve the same access boundary and SLA behavior so enabling optional configuration does not expose tickets or reset elapsed service clocks."
+}
