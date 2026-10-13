@@ -1,0 +1,67 @@
+{
+  "id": "ticket-access/account-intersection",
+  "rule": "Account and department restrictions intersect using complete exact identities.",
+  "source": "domain-model/ticket-access-and-routing.md",
+  "security": true,
+  "given": {
+    "settings": {
+      "visibility": "department",
+      "accounts_enabled": true,
+      "scope_agents": true
+    },
+    "actor": {
+      "role": "agent",
+      "departments": [
+        10
+      ],
+      "account": {
+        "type": "Company",
+        "id": "001"
+      }
+    },
+    "tickets": [
+      {
+        "id": 1,
+        "department_id": 10,
+        "account_type": "Company",
+        "account_id": "001"
+      },
+      {
+        "id": 2,
+        "department_id": 10,
+        "account_type": "Company",
+        "account_id": "001 "
+      },
+      {
+        "id": 3,
+        "department_id": 10,
+        "account_type": "Company ",
+        "account_id": "001"
+      },
+      {
+        "id": 4,
+        "department_id": 10,
+        "account_type": "company",
+        "account_id": "001"
+      },
+      {
+        "id": 5,
+        "department_id": 10,
+        "account_type": "Company",
+        "account_id": "1"
+      },
+      {
+        "id": 6,
+        "department_id": 20,
+        "account_type": "Company",
+        "account_id": "001"
+      }
+    ]
+  },
+  "expect": {
+    "visible_ticket_ids": [
+      1
+    ]
+  },
+  "why": "Ports must preserve the same access boundary and SLA behavior so enabling optional configuration does not expose tickets or reset elapsed service clocks."
+}

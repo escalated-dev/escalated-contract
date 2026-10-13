@@ -1,0 +1,27 @@
+{
+  "id": "ticket-access/sla-department-move",
+  "rule": "Moving departments preserves the attached SLA and elapsed clock.",
+  "source": "domain-model/ticket-access-and-routing.md",
+  "security": false,
+  "given": {
+    "settings": {
+      "targeted_slas": true
+    },
+    "ticket": {
+      "department_id": 10,
+      "created_at": "2026-10-13T09:00:00Z",
+      "sla_policy_id": 4,
+      "first_response_due_at": "2026-10-13T10:00:00Z"
+    },
+    "move": {
+      "department_id": 20,
+      "at": "2026-10-13T09:45:00Z"
+    }
+  },
+  "expect": {
+    "department_id": 20,
+    "sla_policy_id": 4,
+    "first_response_due_at": "2026-10-13T10:00:00Z"
+  },
+  "why": "Ports must preserve the same access boundary and SLA behavior so enabling optional configuration does not expose tickets or reset elapsed service clocks."
+}

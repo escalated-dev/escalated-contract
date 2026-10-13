@@ -1,0 +1,59 @@
+{
+  "id": "ticket-access/department-boundary",
+  "rule": "Department restriction applies before reads, aggregates and bulk mutations.",
+  "source": "domain-model/ticket-access-and-routing.md",
+  "security": true,
+  "given": {
+    "settings": {
+      "visibility": "department"
+    },
+    "actor": {
+      "id": 7,
+      "role": "agent",
+      "departments": [
+        10
+      ]
+    },
+    "tickets": [
+      {
+        "id": 1,
+        "department_id": 10
+      },
+      {
+        "id": 2,
+        "department_id": 20,
+        "requester_id": 7,
+        "assigned_to": 7
+      },
+      {
+        "id": 3,
+        "department_id": null
+      }
+    ],
+    "bulk_ticket_ids": [
+      1,
+      2,
+      3
+    ]
+  },
+  "expect": {
+    "list_ids": [
+      1
+    ],
+    "search_ids": [
+      1
+    ],
+    "report_count": 1,
+    "widget_ids": [
+      1
+    ],
+    "api_ids": [
+      1
+    ],
+    "bulk_mutated_ids": [
+      1
+    ],
+    "hidden_ticket_child_access": false
+  },
+  "why": "Ports must preserve the same access boundary and SLA behavior so enabling optional configuration does not expose tickets or reset elapsed service clocks."
+}
